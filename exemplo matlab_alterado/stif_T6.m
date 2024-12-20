@@ -9,8 +9,8 @@ nos_por_elemento = 6;
 
 k=zeros(2*nos_por_elemento,2*nos_por_elemento); % Isto é 2 graus de liberdade * nr de nos, substituir 9
 % pelo nosso nr de nos
-[ksi,wp]=int_gauss(3);
-[eta,wq]=int_gauss(3);
+[ksi,wp,eta]=int_gauss_T6(3);
+wq = wp;
 for i=1:3
     for j=1:3
         N=shape_T6(ksi(i),eta(j));

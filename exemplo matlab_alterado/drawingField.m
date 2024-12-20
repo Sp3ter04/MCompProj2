@@ -26,7 +26,9 @@ if ( strcmp(tipoElemento,'Q9') )      % Q9 elemento
 elseif ( strcmp(tipoElemento,'Q4') )  % Q4 elemento
   ord=[1,2,3,4,1];
 elseif ( strcmp(tipoElemento,'L2') )  % L2 elemento
-  ord=[1,2];   
+  ord=[1,2];
+elseif ( strcmp(tipoElemento,'T6') )  % T6 elemento
+  ord = [1, 4, 2, 5, 3, 6, 1];
 end
 
 for e=1:size(element,1)

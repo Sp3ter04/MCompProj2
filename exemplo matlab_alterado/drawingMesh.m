@@ -34,6 +34,10 @@ switch elementType
         for k = 1:size(elementNodes,1)
             patch(nodeCoordinates(elementNodes(k,1:4),1),nodeCoordinates(elementNodes(k,1:4),2),'w','FaceColor','none','LineStyle',lineType,'EdgeColor','k')
         end
+    case 'T6'
+        for k = 1:size(elementNodes,1)
+            patch(nodeCoordinates(elementNodes(k,1:3),1),nodeCoordinates(elementNodes(k,1:3),2),'w','FaceColor','none','LineStyle',lineType,'EdgeColor','k')
+        end
     otherwise
         disp('Element type not available')
 end
