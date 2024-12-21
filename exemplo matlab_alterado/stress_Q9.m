@@ -1,4 +1,4 @@
-function stress=stress_Q9(Young,nu,tk,xe,ye,ue);
+function stress=stress_Q9(Young,nu,tk,xe,ye,ue)
 
 % [D] matrix for plane stress (isotropic material)
 dmat=(Young/(1-nu^2))*[1 nu 0; nu 1 0; 0 0 (1-nu)/2];

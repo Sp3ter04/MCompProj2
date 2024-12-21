@@ -7,7 +7,7 @@ dmat=(Young/(1-nu^2))*[1 nu 0; nu 1 0; 0 0 (1-nu)/2];
 
 nos_por_elemento = 6;
 
-k=zeros(2*nos_por_elemento,2*nos_por_elemento); % Isto é 2 graus de liberdade * nr de nos, substituir 9
+k=zeros(2*6,2*6); % Isto é 2 graus de liberdade * nr de nos, substituir 9
 % pelo nosso nr de nos
 [ksi,wp,eta]=int_gauss_T6(3);
 wq = wp;

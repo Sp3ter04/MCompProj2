@@ -1,7 +1,7 @@
 function [gcoord, nodes] = extrair_dados()
     % Abrir os ficheiros para leitura
-    fileID0 = fopen('coordenadas_nos.txt','r');
-    fileID1 = fopen('dados_elementos.txt','r');
+    fileID0 = fopen('nodes_simples.txt','r');
+    fileID1 = fopen('elements_simples.txt','r');
     
     %Ler o ficheiro dos nos
     
