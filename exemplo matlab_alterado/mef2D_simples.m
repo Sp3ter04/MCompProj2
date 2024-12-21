@@ -1,20 +1,43 @@
-%% VOU ALTERAR ESTA MERDA PARA O MEU
+%% Vers√£o com geometria simples
 % Programa de elementos finitos para elementos 2D
 % Exemplo para o elemento T6 em elasticidade 2D
 
 clear all
+clc
 close all
 
 nnel=6; % numero de nos por elemento
 ndof=2; %numero de graus de liberdade por no (para problemas de elasticidade 2D)
-nnode=2620; % numero de nos
-nelem=1250; % numero de elementos
+nnode=25; % numero de nos
+nelem=8; % numero de elementos
 sdof=ndof*nnode; % numero total de graus de liberdade na malha
 
-[gcoord, nodes] = extrair_dados(); % Extrair dados de nos e elementos
+gcoord = zeros(25, 2);
 
+% Preenchendo as coordenadas X
+gcoord(1:5, 1) = 0:0.5:2;
+gcoord(6:10, 1) = 0:0.5:2;
+gcoord(11:15, 1) = 0:0.5:2;
+gcoord(16:20, 1) = 0:0.5:2;
+gcoord(21:25, 1) = 0:0.5:2;
 
-% numeraÁ„o dos graus de liberdade globais dos nÛs globais
+% Preenchendo as coordenadas Y
+gcoord(1:5, 2) = 0;
+gcoord(6:10, 2) = 0.5;
+gcoord(11:15, 2) = 1;
+gcoord(16:20, 2) = 1.5;
+gcoord(21:25, 2) = 2;
+
+nodes(1,:)=[1 3 11 2 7 6];
+nodes(2,:)=nodes(1,:)+2*ones(1,6);
+nodes(3,:)=[3 13 11 8 12 7];
+nodes(4,:)=nodes(3,:)+2*ones(1,6);
+nodes(5,:)=[11 13 21 12 17 16];
+nodes(6,:)=nodes(5,:)+2*ones(1,6);
+nodes(7,:)=[13 23 21 18 22 17];
+nodes(8,:)=nodes(7,:)+2*ones(1,6);
+
+% numera√ß√£o dos graus de liberdade globais dos n√≥s globais
 igdl=0;
 for i=1:nnode
     for j=1:ndof
@@ -32,17 +55,17 @@ for iel=1:nelem
 end
 
 %% Aplicar carga pontual a todos os nos
-face_force = find(gcoord(:, 1) == 0.8); % Ir buscar nos que est„o na zona 
-% da direita da placa para aplicarmos a forÁa
+face_force = find(gcoord(:, 1) == 2); % Ir buscar nos que est√£o na zona 
+% da direita da placa para aplicarmos a for√ßa
 
 % Carregamento pontual nos nos
 P(1:sdof)=0;
-P(face_force*2-1)=1e6; % Aplicar forÁa ao grau de liberdade em x dos nos do
+P(face_force*2-1)=1e5; % Aplicar for√ßa ao grau de liberdade em x dos nos do
 % face_force
  P=P'; % transposicao para vector coluna
 
-%% Aplicar condiÁıes de fronteira
-% Ir buscar nos que est„o em x = 0 e y = 0
+%% Aplicar condi√ß√µes de fronteira
+% Ir buscar nos que est√£o em x = 0 e y = 0
 nos_x_nulo = find(gcoord(:, 1) == 0);
 nos_y_nulo = find(gcoord(:, 2) == 0);
 
@@ -62,9 +85,9 @@ n_fronteiras = size(fronteiras,2);
 % bcval=[0 0 0 0];
  bcdof= fronteiras;
  bcval=zeros(1, n_fronteiras);
-%% Acho que isto j· t· cremoso
+%% Acho que isto j√° t√° cremoso
 % inicializacao a zeros das matrizes e vectores
-ff=zeros(sdof,1); % vector de forÁas global
+ff=zeros(sdof,1); % vector de for√ßas global
 kk=zeros(sdof,sdof); % matriz de rigidez global
 index=zeros(nnel*ndof,1); % vector de indexacao dos graus de liberdade do elemento (para assemblegem)
 
@@ -73,13 +96,13 @@ for iel=1:nelem
   n=nodes(iel,1:nnel); % extraccao da numeracao global de nos para cada elemento
   xe=gcoord(n,1); % extraccao das coordenadas de cada no do elemento
   ye=gcoord(n,2);
-  k=stif_T6(Young(iel),nu(iel),tk(iel),xe,ye); % c·lculo da matriz de rigidez do elemento
-  f=zeros(12,1); % as forÁas distribuidas v„o ser aplicadas nos nÛs (forÁas equivalentes nodais)
+  k=stif_T6(Young(iel),nu(iel),tk(iel),xe,ye); % c√°lculo da matriz de rigidez do elemento
+  f=zeros(12,1); % as for√ßas distribuidas v√£o ser aplicadas nos n√≥s (for√ßas equivalentes nodais)
   index=eldof(iel,nnel,nodes,gdl);
   [kk,ff]=assemb(kk,ff,k,f,index);
 end
 
-%% Parece me safe (talvez n„o)
+%% Parece me safe (talvez n√£o)
 % imposicao de condicoes de fronteira
 [kk,ff]=cf(kk,ff,bcdof,bcval); % O professor atualizou isto
 
@@ -89,7 +112,7 @@ ff=ff+P; % imposicao de cargas pontuais
 u=kk\ff;
 
 %% In review
-% representaÁ„o da deformada
+% representa√ß√£o da deformada
 UX = u(1:2:2*nnode);
 UY = u(2:2:2*nnode);
 scaleFactor = 100;
@@ -101,7 +124,7 @@ drawingMesh(gcoord,nodes,'T6','--');
 colorbar
 title('Displacement field u_x (on deformed shape)')
 %% 
-% % c·lculo das tensıes (componentes no plano)
+% % c√°lculo das tens√µes (componentes no plano)
 % stress=zeros(nelem,4,3); % 3 in-plane componentes of stress per element, at the 4 Gauss points
 % for iel=1:nelem
 %    n=nodes(iel,1:nnel); % extraccao da numeracao global de nos para cada elemento
@@ -109,7 +132,7 @@ title('Displacement field u_x (on deformed shape)')
 %    ye=gcoord(n,2);
 %    index=eldof(iel,nnel,nodes,gdl);
 %    ue=u(index); % deslocamentos do elemento
-%    stress(iel,:,:)=stress_Q9(Young(iel),nu(iel),tk(iel),xe,ye,ue); % tensıes no plano
+%    stress(iel,:,:)=stress_Q9(Young(iel),nu(iel),tk(iel),xe,ye,ue); % tens√µes no plano
 %   % Extrapolation of the stress from Gauss points to Q9 nodes
 %    T=[ 1+0.5*sqrt(3), -0.5, 1-0.5*sqrt(3), -0.5;...
 %        -0.5, 1+0.5*sqrt(3), -0.5, 1-0.5*sqrt(3);...
